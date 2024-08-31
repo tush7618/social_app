@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13.2
+    container_name: dbsocial01
+    volumes:
+       - ./social_data1:/var/lib/postgresql/data
+    environment:
+       POSTGRES_PASSWORD: tech
+       POSTGRES_USER: postgres
+       POSTGRES_DB: social_app_test
+
+  adminer:
+    image: adminer:latest
+    container_name: socialapp1
+    ports:
+      - 8282:8080
+
+  web:
+    build: .
+    container_name: social01
+    command: python3 manage.py runserver 0.0.0.0:8001
+    volumes:
+      - .:/code
+    ports:
+      - 8002:8002
+    depends_on:
+      - db
+
